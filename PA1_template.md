@@ -3,8 +3,7 @@ Reproducible Research Peer Graded Assignment: Course Project 1
 
 Preparation of R environment
 
-
-```r
+```{r environment setup}
 library(knitr)
 library(ggplot2)
 opts_chunk$set(echo = TRUE)
@@ -12,54 +11,32 @@ opts_chunk$set(echo = TRUE)
 
 Loading data from excel file
 
-
-```r
+```{r loading data}
 data <- read.csv("activity.csv",header=TRUE,sep=",",colClasses=c("numeric","character","numeric"))
 data$date = as.Date(data$date,format="%Y-%m-%d")
 data$interval=as.factor(data$interval)
 ```
 
 Question 1: What is mean total number of steps taken per day?
-
-```r
+```{r question 1}
 data_valid <-data[complete.cases(data),]
 steps_daily <-aggregate(steps~date,data_valid,sum)
-head(steps_daily)
-```
-
-```
-##         date steps
-## 1 2012-10-02   126
-## 2 2012-10-03 11352
-## 3 2012-10-04 12116
-## 4 2012-10-05 13294
-## 5 2012-10-06 15420
-## 6 2012-10-07 11015
-```
-
-```r
 hist(steps_daily$steps, 
     main = "Histogram of steps per day",
     xlab = "Total number of steps taken per day",
     ylab = "Number of day",
     las = 1,
     ylim = c(0,40))
-```
-
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-1.png)
-
-```r
 mean_steps <- mean(steps_daily$steps)
 median_steps <- median(steps_daily$steps)
 mean_steps = round(mean_steps,3)
 mean_steps = as.character(mean_steps)
 median_steps = as.character(median_steps)
 ```
-The mean of the total number of steps taken per day is 10766.189 and median of the total number of steps taken per day is 10765.
+The mean of the total number of steps taken per day is `r mean_steps` and median of the total number of steps taken per day is `r median_steps`.
 
 Question 2: What is the average daily activity pattern?
-
-```r
+```{r question 2}
 steps_interval <- aggregate(data_valid$steps,list(interval=data_valid$interval),mean)
 steps_interval$interval <- as.character(steps_interval$interval)
 plot(steps_interval$interval, 
@@ -71,26 +48,19 @@ plot(steps_interval$interval,
      col.main = "blue",
      xlab = "Daily Interval",
      ylab = "Average step taken for each interval")
-```
-
-![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png)
-
-```r
 max <- steps_interval[which.max(steps_interval$x), ]
 max_interval <- max$interval
 max_step <- max$x
 max_step <- round(max_step,3)
 ```
-The highest average number of steps was found in the 835th interval, which has the maximum steps of 206.17 steps.
+The highest average number of steps was found in the `r max_interval`th interval, which has the maximum steps of `r max_step` steps.
 
 Question 3:Imputing missing values
-
-```r
+```{r question 3}
 na_missing = nrow(data)-nrow(data_valid)
 ```
-The total number of missing values in the dataset is 2304.
-
-```r
+The total number of missing values in the dataset is `r na_missing`.
+```{r}
 for(i in which(is.na(data$steps))) {
     int <- data$interval[i]
     data_replace <- steps_interval[which(steps_interval$interval == int), ]$x
@@ -104,11 +74,6 @@ hist(final_steps_daily$steps,
     ylab = "Number of day",
     las = 1,
     ylim = c(0,40))
-```
-
-![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png)
-
-```r
 final_mean_steps <- mean(final_steps_daily$steps)
 final_median_steps <- median(final_steps_daily$steps)
 final_mean_steps = round(final_mean_steps,3)
@@ -116,11 +81,10 @@ final_median_steps = round(final_median_steps,3)
 final_mean_steps = as.character(final_mean_steps)
 final_median_steps = as.character(final_median_steps)
 ```
-The mean of the total number of steps taken per day is 10766.189 and median of the total number of steps taken per day is 10766.189.The mean remain unchanged however the median increases towards the mean value.The imputing of the missing data on the estimates of the total daily numbers of steps only impact the median, but does not affect the mean.
+The mean of the total number of steps taken per day is `r final_mean_steps` and median of the total number of steps taken per day is `r final_median_steps`.The mean remain unchanged however the median increases towards the mean value.The imputing of the missing data on the estimates of the total daily numbers of steps only impact the median, but does not affect the mean.
 
 Question 4:Are there differences in activity patterns between weekdays and weekends?
-
-```r
+```{r question 4}
 data_final$days <- ifelse(weekdays(data_final$date) %in% c("Saturday", "Sunday"), "weekend", "weekday")
 data_final$days  <- as.factor(data_final$days)
 data_final<- aggregate(steps ~ interval + days,data_final, mean)
@@ -130,8 +94,6 @@ ggplot(data_final, aes(interval,steps,group=1)) +
         facet_wrap(~days, nrow=2, ncol=1) +
         labs(x="Interval", y="Number of steps")
 ```
-
-![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png)
         
 
 
