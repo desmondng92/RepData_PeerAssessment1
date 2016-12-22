@@ -46,7 +46,7 @@ hist(steps_daily$steps,
     ylim = c(0,40))
 ```
 
-![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-1.png)
 
 ```r
 mean_steps <- mean(steps_daily$steps)
@@ -73,7 +73,7 @@ plot(steps_interval$interval,
      ylab = "Average step taken for each interval")
 ```
 
-![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-1.png)
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png)
 
 ```r
 max <- steps_interval[which.max(steps_interval$x), ]
@@ -106,7 +106,7 @@ hist(final_steps_daily$steps,
     ylim = c(0,40))
 ```
 
-![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9-1.png)
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png)
 
 ```r
 final_mean_steps <- mean(final_steps_daily$steps)
@@ -131,7 +131,7 @@ ggplot(data_final, aes(interval,steps,group=1)) +
         labs(x="Interval", y="Number of steps")
 ```
 
-![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10-1.png)
+![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png)
         
 
 
